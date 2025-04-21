@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: postgres-db
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ecommercedb
+    ports:
+      - 55432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: ["postgres"] # Ensure the default entrypoint is used
+    networks:
+      - dw-ecommerce-network
+
+  pgadmin:
+    container_name: pgadmin_db
+    image: dpage/pgadmin4
+    ports:
+      - 5050:80
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - dw-ecommerce-network
+
+  extractor:
+    build: ./extractor
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_NAME: ecommercedb
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_PORT: 5432
+
+volumes:
+  pgdata:
+  pgadmin-data:
+
+networks:
+  dw-ecommerce-network:
+    driver: bridge
