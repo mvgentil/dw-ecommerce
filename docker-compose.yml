@@ -40,7 +40,7 @@ services:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - BUCKET_NAME=${BUCKET_NAME}
-    command: python main.py
+    command: python src/main.py
 
   dbt:
     image: ghcr.io/dbt-labs/dbt-postgres:1.7.9
@@ -52,7 +52,13 @@ services:
     working_dir: /usr/app
     environment:
       - DBT_PROFILES_DIR=/usr/app
-    entrypoint: ["tail", "-f", "/dev/null"]  # Fica "parado" esperando você entrar e rodar dbt
+    ports:
+      - 8080:8080
+    networks:
+      - fake-store-network
+  
+  # entrypoint: ["dbt", "docs", "serve", "--port", "8080", "--host", "0.0.0.0"] # Serve a documentação do dbt na porta 8080
+    entrypoint: ["tail", "-f", "/dev/null"]  # Fica "parado" esperando rodar dbt
 
 
 volumes:
