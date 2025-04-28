@@ -30,7 +30,21 @@ This project is a data warehouse setup for an e-commerce platform. It uses Docke
      - Email: `admin@admin.com`
      - Password: `admin`
 
-5. **Stop the Services**:
+     - Connect to a new server:
+       - Name: `postgres`
+       - Host: `postgres`
+       - Port: `5432`
+       - User: `postgres`	
+       - Password: `postgres`
+
+5. **Run dbt tranformations**:
+   You may run `dbt run` in the project root directory (make sure you have dbt installed) or run inside the docker container:
+   ```bash
+   docker exec -it fake_store_dbt dbt run
+   ```
+
+
+6. **Stop the Services**:
    To stop and remove containers, networks, and volumes, run:
    ```bash
    docker-compose down -v
@@ -41,16 +55,20 @@ This project is a data warehouse setup for an e-commerce platform. It uses Docke
 The following environment variables are used in the project:
 
 - **PostgreSQL**:
-  - `POSTGRES_USER`: Username for the database (default: `postgres`).
-  - `POSTGRES_PASSWORD`: Password for the database (default: `postgres`).
-  - `POSTGRES_DB`: Name of the database (default: `ecommercedb`).
-
-- **Extractor**:
   - `DB_HOST`: Hostname of the database (default: `postgres`).
-  - `DB_NAME`: Name of the database (default: `ecommercedb`).
+  - `DB_NAME`: Name of the database (default: `fake_store`).
   - `DB_USER`: Username for the database (default: `postgres`).
   - `DB_PASS`: Password for the database (default: `postgres`).
   - `DB_PORT`: Port of the database (default: `5432`).
+
+- **pgAdmin**:
+  - `PGADMIN_DEFAULT_EMAIL`: Default email for pgAdmin (default: `admin@admin.com`).
+  - `PGADMIN_DEFAULT_PASSWORD`: Default password for pgAdmin (default: `admin`).
+
+- **AWS Credentials**:
+  - `AWS_ACCESS_KEY_ID`: AWS access key ID.
+  - `AWS_SECRET_ACCESS_KEY`: AWS secret access key.
+  - `BUCKET_NAME`: Name of the S3 bucket (for example: `fake-store-bucket-raw`).
 
 ## Troubleshooting
 

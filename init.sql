@@ -1,29 +1,34 @@
--- USERS
-CREATE TABLE IF NOT EXISTS stg_users (
+-- Cria schemas
+CREATE SCHEMA IF NOT EXISTS bronze;
+CREATE SCHEMA IF NOT EXISTS silver;
+CREATE SCHEMA IF NOT EXISTS gold;
+
+-- Tabela USERS
+CREATE TABLE IF NOT EXISTS bronze.bronze_users (
     id INTEGER PRIMARY KEY,
     email TEXT,
-    username TEXT
+    username TEXT,
+    date TIMESTAMP,
+    source TEXT
 );
 
--- PRODUCTS
-CREATE TABLE IF NOT EXISTS stg_products (
+-- Tabela PRODUCTS
+CREATE TABLE IF NOT EXISTS bronze.bronze_products (
     id INTEGER PRIMARY KEY,
     title TEXT,
     price NUMERIC,
-    category TEXT
+    description TEXT,
+    category TEXT,
+    image TEXT,
+    date TIMESTAMP,
+    source TEXT
 );
 
--- CARTS
-CREATE TABLE IF NOT EXISTS stg_carts (
+-- Tabela CARTS
+CREATE TABLE IF NOT EXISTS bronze.bronze_carts (
     id INTEGER PRIMARY KEY,
     userId INTEGER,
-    date TIMESTAMP
-);
-
--- CART ITEMS
-CREATE TABLE IF NOT EXISTS stg_cart_items (
-    cart_id INTEGER,
-    product_id INTEGER,
-    quantity INTEGER,
-    PRIMARY KEY (cart_id, product_id)
+    products JSONB,
+    date TIMESTAMP,
+    source TEXT
 );
